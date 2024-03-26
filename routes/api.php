@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/update-password', [AuthController::class, 'updatePassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);

@@ -90,6 +90,31 @@ class AuthController extends Controller
         }
     }
 
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required|string|min:6',
+        ]);
+
+        try {
+            $userFound = User::where('email', $request->email)->first();
+
+            if(!$userFound) {
+                return response()->json(['message' => 'Usuario no encontrado'], Response::HTTP_BAD_REQUEST);
+            }
+
+            User::where('email', $request->email)->update([
+                'password' => bcrypt($request->password),
+                'setPassword' => false
+            ]);
+
+            return response()->json(['message' => 'Contraseña actualizada correctamente'], Response::HTTP_OK);
+        } catch (Exception $ex) {
+            return response()->json(['error' => $ex], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Sesion finalizada'], Response::HTTP_OK);
