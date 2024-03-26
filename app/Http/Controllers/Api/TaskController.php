@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
 use Exception;
@@ -25,11 +26,11 @@ class TaskController extends Controller
     public function getAllTasks()
     {
         $tasks = Task::with('user')->get();
-        $users = User::where('role_id', '!=', Auth::id())->get();
+        $users = User::with('role')->where('role_id', '!=', Auth::id())->get();
 
         return response()->json([
-            'tasks' => $tasks,
-            'users' => $users
+            'tasks' => TaskResource::collection($tasks),
+            'users' => UserResource::collection($users)
         ]);
     }
 
