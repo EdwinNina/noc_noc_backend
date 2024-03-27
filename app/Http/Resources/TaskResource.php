@@ -20,7 +20,8 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'user' => new UserResource($this->user),
-            'comments' => CommentResource::collection($this->whenLoaded('comments'))
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
+            'files' => FileResource::collection($this->whenLoaded('files')),
         ];
     }
 }

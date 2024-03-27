@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Task::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role->name === Role::ADMIN_USER;
+    }
 }

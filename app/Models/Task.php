@@ -58,4 +58,14 @@ class Task extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Get all of the comments for the Task
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
+    }
 }

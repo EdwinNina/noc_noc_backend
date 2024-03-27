@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('users', UserController::class);
     Route::post('/comments', [CommentController::class, 'store']);
     Route::get('/comments/task/{task_id}', [CommentController::class, 'getCommentsByTask']);
+    Route::post('/files', [FileController::class, 'store']);
+    Route::get('/files/task/{task_id}', [FileController::class, 'getFilesByTask']);
+    Route::delete('/files/{file}', [FileController::class, 'delete']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
