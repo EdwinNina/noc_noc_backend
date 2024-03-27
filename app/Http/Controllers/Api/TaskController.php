@@ -17,8 +17,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $current_user = Auth::id();
-        $tasks = Task::where('user_id', $current_user)->get();
+        $tasks = Task::get();
 
         return TaskResource::collection($tasks);
     }
@@ -88,6 +87,20 @@ class TaskController extends Controller
             return response()->json([ 'message' => 'Tarea eliminada correctamente'], Response::HTTP_OK);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex, 'message' => 'Hubo un error al eliminar la tarea, intentalo de nuevo'], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function updateStatus(Request $request, Task $task)
+    {
+        $this->authorize('owner', $task);
+
+        try {
+            $task->status = $request->status;
+            $task->save();
+
+            return response()->json([ 'message' => 'Estado actualizado correctamente'], Response::HTTP_OK);
+        } catch (Exception $ex) {
+            return response()->json(['error' => $ex, 'message' => 'Hubo un error al actualizar la tarea, intentalo de nuevo'], Response::HTTP_BAD_REQUEST);
         }
     }
 }

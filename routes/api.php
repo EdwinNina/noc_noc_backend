@@ -26,6 +26,7 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/tasks/get-all', [TaskController::class, 'getAllTasks']);
+    Route::put('/tasks/update-status/{task}', [TaskController::class, 'updateStatus']);
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('users', UserController::class);
 
