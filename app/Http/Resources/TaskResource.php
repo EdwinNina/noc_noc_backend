@@ -19,7 +19,8 @@ class TaskResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status,
-            'user' => new UserResource($this->user)
+            'user' => new UserResource($this->user),
+            'comments' => CommentResource::collection($this->whenLoaded('comments'))
         ];
     }
 }

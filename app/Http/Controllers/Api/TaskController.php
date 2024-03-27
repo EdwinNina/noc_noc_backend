@@ -54,6 +54,8 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $task->load('comments');
+
         return new TaskResource($task);
     }
 
