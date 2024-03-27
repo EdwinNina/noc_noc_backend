@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\TaskHistory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $data = TaskHistory::join('users', 'users.id','=', 'task_histories.user_id')
+        ->join('tasks', 'tasks.id','=', 'task_histories.task_id')
+        ->select('tasks.id', 'tasks.title', 'tasks.description','users.name','task_histories.status', 'task_histories.created_at')
+        ->get();
+    return $data;
 });

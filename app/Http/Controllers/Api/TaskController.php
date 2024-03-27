@@ -7,6 +7,7 @@ use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
+use App\Models\TaskHistory;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,6 +44,11 @@ class TaskController extends Controller
             $task->user_id = $request->user_id;
             $task->save();
 
+            TaskHistory::create([
+                'task_id' => $task->id,
+                'user_id' => $request->user_id,
+                'status' => Task::PENDING_STATUS
+            ]);
             return response()->json(['message' => 'Tarea guardada correctamente'], Response::HTTP_CREATED);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex, 'message' => 'Hubo un error al guardar la tarea, intentalo de nuevo'], Response::HTTP_BAD_REQUEST);
@@ -85,6 +91,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         try {
+            TaskHistory::where('task_id', $task->id)->delete();
             $task->delete();
             return response()->json([ 'message' => 'Tarea eliminada correctamente'], Response::HTTP_OK);
         } catch (Exception $ex) {
@@ -99,6 +106,12 @@ class TaskController extends Controller
         try {
             $task->status = $request->status;
             $task->save();
+
+            TaskHistory::create([
+                'task_id' => $task->id,
+                'user_id' => Auth::id(),
+                'status' => $request->status
+            ]);
 
             return response()->json([ 'message' => 'Estado actualizado correctamente'], Response::HTTP_OK);
         } catch (Exception $ex) {
